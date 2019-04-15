@@ -54,7 +54,7 @@ namespace ImageToPDF
             for (int i = 0; ; i++)
             {
                 var suffix = (i == 0) ? "" : $"({i})";
-                var candidate = $"{directory}/{prefix}_converted{suffix}.pdf";
+                var candidate = $"{directory}/{prefix}{suffix}.pdf";
                 if (!File.Exists(candidate)) return candidate;
             }
         }

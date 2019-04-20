@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -19,7 +20,8 @@ namespace ImageToPDF
                 throw new InvalidOperationException($"Cannot convert {sourceFilename} to PDF.");
             }
             this.curretSourceFilename = sourceFilename;
-            var images = this.GetPdfImageOfCorrectFilename(sourceFilename);
+            var images = this.GetPdfImageOfCorrectFilename(sourceFilename).ToArray();
+            Console.WriteLine($"Detect {images.Length} images in {sourceFilename}.");
             foreach (var image in images)
             {
                 this.SaveImageAsPdf(image);

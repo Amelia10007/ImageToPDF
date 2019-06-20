@@ -12,10 +12,8 @@ namespace ImageToPDF
             Console.WriteLine("Images to PDF");
             var filenames = GetTargetFilenames(args).ToArray();
             Console.WriteLine($"Detect {filenames.Length} files from arguments.");
-            foreach (var tuple in filenames.WithIndex())
+            foreach (var (path, index) in filenames.WithIndex())
             {
-                var path = tuple.Item1;
-                var index = tuple.Item2;
                 Console.WriteLine($"[{index + 1}/{filenames.Length}]: {path}");
                 try
                 {

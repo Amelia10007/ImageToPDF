@@ -66,6 +66,52 @@ namespace ImageToPDF
             }
         }
 
+        public override void SaveAsPdf(TaskCommand command)
+        {
+            int startPage, endPage;
+            switch (command.Options.Count)
+            {
+                case 0:
+                    startPage = 1;
+                    endPage = int.MaxValue;
+                    break;
+                case 1:
+                    startPage = endPage = int.Parse(command.Options.First());
+                    break;
+                case 2:
+                    startPage = int.Parse(command.Options.First());
+                    endPage = int.Parse(command.Options.Last());
+                    break;
+                default: throw new ArgumentException("Invalid argument.");
+            }
+            using (var powerPointApplication = new PowerPointApplication(new Application()))
+            {
+                var application = powerPointApplication.Application;
+                var presentation = application.Presentations;
+                using (var presenationFile = new PowerPointPresentation(presentation.Open(
+                    FileName: command.SourceFilename,
+                    ReadOnly: MsoTriState.msoTrue,
+                    Untitled: MsoTriState.msoTrue,
+                    WithWindow: MsoTriState.msoTrue)))
+                {
+                    var file = presenationFile.Presentation;
+                    foreach (var slide in EnumeratePowerPointSlides(file))
+                    {
+                        if (slide.SlideNumber < startPage) continue;
+                        if (slide.SlideNumber > endPage) break;
+                        slide.Select();
+                        slide.Shapes.SelectAll();
+                        var selection = application.ActiveWindow.Selection;
+                        var shapes = selection.ShapeRange;
+                        var tempFilename = Path.GetTempFileName();
+                        shapes.Export(tempFilename, PpShapeFormat.ppShapeFormatEMF);
+                        var destination = $"{Path.GetFileName(command.SourceFilename)}-{slide.SlideNumber}.pdf";
+                        File.Delete(tempFilename);
+                    }
+                }
+            }
+        }
+
         private static readonly string[] validExtensions = new[] { ".ppt", ".pptx" };
     }
 }

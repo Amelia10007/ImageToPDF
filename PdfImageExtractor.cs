@@ -62,5 +62,10 @@ namespace ImageToPDF
             var stream = reader.GetPdfObject(index) as PRStream;
             return PdfReader.GetStreamBytesRaw(stream);
         }
+
+        public override void SaveAsPdf(TaskCommand command)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -9,31 +9,15 @@ namespace ImageToPDF
 {
     abstract class PdfImageGenerator
     {
-        private string curretSourceFilename;
-
         public abstract bool IsValidFilename(string sourceFilename);
 
-        public void WritePdfImage(string sourceFilename)
-        {
-            if (!this.IsValidFilename(sourceFilename))
-            {
-                throw new InvalidOperationException($"Cannot convert {sourceFilename} to PDF.");
-            }
-            this.curretSourceFilename = sourceFilename;
-            var images = this.GetPdfImageOfCorrectFilename(sourceFilename).ToArray();
-            Console.WriteLine($"Detect {images.Length} images in {sourceFilename}.");
-            foreach (var image in images)
-            {
-                this.SaveImageAsPdf(image);
-            }
-        }
+        public abstract void SaveAsPdf(TaskCommand command);
 
         protected abstract IEnumerable<Image> GetPdfImageOfCorrectFilename(string correctSourceFilename);
 
-        private void SaveImageAsPdf(Image image)
+        protected void SaveImageAsPdf(Image image, string destination)
         {
-            var pdfPath = this.GetIdentifiablePdfPath();
-            using (var fileStream = new FileStream(pdfPath, FileMode.Create, FileAccess.Write))
+            using (var fileStream = new FileStream(destination, FileMode.Create, FileAccess.Write))
             {
                 var document = new Document(
                     pageSize: new Rectangle(image.Width, image.Height),
@@ -46,18 +30,6 @@ namespace ImageToPDF
                 document.Open();
                 document.Add(image);
                 document.Close();
-            }
-        }
-
-        private string GetIdentifiablePdfPath()
-        {
-            var directory = Path.GetDirectoryName(this.curretSourceFilename);
-            var prefix = Path.GetFileNameWithoutExtension(this.curretSourceFilename);
-            for (int i = 0; ; i++)
-            {
-                var suffix = (i == 0) ? "" : $"({i})";
-                var candidate = $"{directory}/{prefix}{suffix}.pdf";
-                if (!File.Exists(candidate)) return candidate;
             }
         }
     }

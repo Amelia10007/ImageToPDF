@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Text;
 
 namespace ImageToPDF
 {
@@ -8,28 +9,25 @@ namespace ImageToPDF
     {
         public readonly string SourceFilename;
         public readonly IReadOnlyCollection<string> Options;
-        private TaskCommand(string source, IEnumerable<string> options)
+        public TaskCommand(string sourceFilename) : this(sourceFilename, Enumerable.Empty<string>()) { }
+        public TaskCommand(string sourceFilename, IEnumerable<string> options)
         {
-            this.SourceFilename = source;
+            this.SourceFilename = sourceFilename;
             this.Options = options.ToArray();
         }
-        public static IEnumerable<TaskCommand> ToCommands(string[] args)
+        public string GetOutputPath(string extension = "pdf", string suffix = "")
         {
-            var filenameIndexes = args.AllIndexesOf(arg => IsFilename(arg)).ToArray();
-            foreach (var (index, hasNext, nextIndex) in filenameIndexes.WithNext())
-            {
-                var source = args[index];
-                var optionFrom = index + 1;
-                var optionTo = hasNext ? (nextIndex - 1) : (args.Length - 1);
-                var options = args.FromTo(optionFrom, optionTo);
-                yield return new TaskCommand(source, options);
-            }
+            var directory = Path.GetDirectoryName(this.SourceFilename);
+            var file = $"{Path.GetFileNameWithoutExtension(this.SourceFilename)}{suffix}.{extension}";
+            return $@"{directory}\{file}";
         }
-        private static bool IsFilename(string arg)
+        public override string ToString()
         {
-            var index = arg.LastIndexOf('.');
-            //ファイル名と拡張子が1文字以上あれば，有効なファイル名であると判定
-            return index > 1 && index < arg.Length - 1;
+            var builder = new StringBuilder();
+            builder.Append(this.SourceFilename);
+            foreach (var option in this.Options)
+                builder.Append($" {option}");
+            return builder.ToString();
         }
     }
 }

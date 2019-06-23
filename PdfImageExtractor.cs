@@ -7,22 +7,42 @@ using iTextSharp.text.pdf;
 
 namespace ImageToPDF
 {
-    class PdfImageExtractor : PdfImageGenerator
+    class PdfImageExtractor : IPdfImageGenerator
     {
-        public override bool IsValidFilename(string sourceFilename)
+        public bool IsValidCommand(TaskCommand command) =>
+            Path.GetExtension(command.SourceFilename).ToLower() == ".pdf"
+            && !command.Options.Any();
+
+        public void SaveAsPdf(TaskCommand command)
         {
-            return Path.GetExtension(sourceFilename).ToLower() == ".pdf";
+            if (!this.IsValidCommand(command))
+            {
+                throw new ArgumentException("Invalid command.");
+            }
+            var images = this.GetPdfImages(command).WithIndex();
+            foreach (var (image, index) in images)
+            {
+                var destination = command.GetOutputPath(suffix: (index + 1).ToString());
+                using (var fileStream = new FileStream(destination, FileMode.Create, FileAccess.Write))
+                {
+                    var document = new Document(
+                        pageSize: new Rectangle(image.Width, image.Height),
+                        marginLeft: 0f,
+                        marginRight: 0f,
+                        marginTop: 0f,
+                        marginBottom: 0f);
+                    image.SetAbsolutePosition(0f, 0f);
+                    PdfWriter.GetInstance(document, fileStream);
+                    document.Open();
+                    document.Add(image);
+                    document.Close();
+                }
+            }
         }
 
-        private static IEnumerable<PdfDictionary> GetPdfPages(PdfReader reader)
+        private IEnumerable<Image> GetPdfImages(TaskCommand command)
         {
-            foreach (var page in Enumerable.Range(1, reader.NumberOfPages))
-                yield return reader.GetPageN(page);
-        }
-
-        protected override IEnumerable<Image> GetPdfImageOfCorrectFilename(string correctSourceFilename)
-        {
-            var reader = new PdfReader(correctSourceFilename);
+            var reader = new PdfReader(command.SourceFilename);
             foreach (var page in GetPdfPages(reader))
             {
                 var objects = this.GetPdfObjectsInPage(page);
@@ -35,6 +55,12 @@ namespace ImageToPDF
                     yield return image;
                 }
             }
+        }
+
+        private static IEnumerable<PdfDictionary> GetPdfPages(PdfReader reader)
+        {
+            foreach (var page in Enumerable.Range(1, reader.NumberOfPages))
+                yield return reader.GetPageN(page);
         }
 
         private PdfDictionary GetPdfObjectsInPage(PdfDictionary pdfPage)
@@ -61,11 +87,6 @@ namespace ImageToPDF
             var index = Convert.ToInt32((pdfObject as PdfIndirectReference).Number.ToString());
             var stream = reader.GetPdfObject(index) as PRStream;
             return PdfReader.GetStreamBytesRaw(stream);
-        }
-
-        public override void SaveAsPdf(TaskCommand command)
-        {
-            throw new NotImplementedException();
         }
     }
 }

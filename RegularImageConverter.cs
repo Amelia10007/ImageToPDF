@@ -1,22 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
 namespace ImageToPDF
 {
-    abstract class PdfImageGenerator
+    class RegularImageConverter : IPdfImageGenerator
     {
-        public abstract bool IsValidFilename(string sourceFilename);
+        public RegularImageConverter() { }
 
-        public abstract void SaveAsPdf(TaskCommand command);
+        public bool IsValidCommand(TaskCommand command) =>
+            validExtensions.Contains(Path.GetExtension(command.SourceFilename).ToLower())
+            && !command.Options.Any();
 
-        protected abstract IEnumerable<Image> GetPdfImageOfCorrectFilename(string correctSourceFilename);
-
-        protected void SaveImageAsPdf(Image image, string destination)
+        public void SaveAsPdf(TaskCommand command)
         {
+            if (!this.IsValidCommand(command))
+            {
+                throw new ArgumentException("Invalid command.");
+            }
+            var image = Image.GetInstance(command.SourceFilename);
+            var destination = command.GetOutputPath();
             using (var fileStream = new FileStream(destination, FileMode.Create, FileAccess.Write))
             {
                 var document = new Document(
@@ -32,5 +37,7 @@ namespace ImageToPDF
                 document.Close();
             }
         }
+
+        private static readonly string[] validExtensions = new[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif", ".tif", ".tiff", ".wmf" };
     }
 }

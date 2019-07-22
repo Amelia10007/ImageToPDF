@@ -7,68 +7,52 @@ namespace ImageToPDF
 {
     static class ArgumentParser
     {
-        private class ParsedArgument
-        {
-            public readonly string SourceName;
-            public readonly bool IsFile;
-            public readonly IReadOnlyCollection<string> Options;
-            public ParsedArgument(string sourceName, bool isFile, IEnumerable<string> options)
-            {
-                this.SourceName = sourceName;
-                this.IsFile = isFile;
-                this.Options = options.ToArray();
-            }
-        }
         public static IEnumerable<TaskCommand> ParseArguments(IEnumerable<string> args)
         {
-            var tempCommands = CreateTemporaryCommands(args);
-            foreach (var tempCommand in tempCommands)
+            var directoryInfoExpansion = ExpandDirectoryInfo(args);
+            var whetherOptions = AttachOptionAttribute(directoryInfoExpansion)
+                .SkipWhile(item => item.isOption)
+                .ToArray();
+            while (whetherOptions.Any())
             {
-                //file
-                if (tempCommand.IsFile)
-                {
-                    yield return new TaskCommand(tempCommand.SourceName, tempCommand.Options);
-                    continue;
-                }
-                //directory
-                var searchOption = (tempCommand.Options.Any() && tempCommand.Options.First() == recursiveEnumerationOption)
-                    ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-                var files = Directory.EnumerateFiles(tempCommand.SourceName, "*", searchOption);
-                var remainingOptions = tempCommand.Options.Skip(1).ToArray();
-                foreach (var file in files)
-                {
-                    yield return new TaskCommand(file, remainingOptions);
-                }
+                var filename = whetherOptions.First().arg;
+                var options = whetherOptions
+                    .Skip(1)
+                    .TakeWhile(item => item.isOption)
+                    .Select(item => item.arg)
+                    .ToArray();
+                yield return new TaskCommand(filename, options);
+                whetherOptions = whetherOptions
+                    .Skip(1 + options.Length)
+                    .ToArray();
             }
         }
         private static readonly string recursiveEnumerationOption = "-r";
-        private static IEnumerable<ParsedArgument> CreateTemporaryCommands(IEnumerable<string> args)
+        private static IEnumerable<string> ExpandDirectoryInfo(IEnumerable<string> args)
         {
-            string tempSourceName = null;
-            var tempOptions = new List<string>();
+            foreach (var (current, hasNext, next) in args.WithNext())
+            {
+                if (current == recursiveEnumerationOption) continue;
+                if (!Directory.Exists(current))
+                {
+                    yield return current;
+                    continue;
+                }
+                var expandRecursively = hasNext && next == recursiveEnumerationOption;
+                var searchOption = expandRecursively ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                var files = Directory.EnumerateFiles(current, "*", searchOption);
+                foreach (var file in files)
+                {
+                    yield return file;
+                }
+            }
+        }
+        private static IEnumerable<(string arg, bool isOption)> AttachOptionAttribute(IEnumerable<string> args)
+        {
             foreach (var arg in args)
             {
-                var hasSourceNameRead = tempSourceName != null;
-                if (!hasSourceNameRead)
-                {
-                    tempSourceName = arg;
-                    continue;
-                }
-                var isOption = !(File.Exists(arg) || Directory.Exists(arg));
-                if (isOption)
-                {
-                    tempOptions.Add(arg);
-                    continue;
-                }
-                var isFile = File.Exists(tempSourceName);
-                yield return new ParsedArgument(tempSourceName, isFile, tempOptions);
-                tempSourceName = null;
-                tempOptions = new List<string>();
-            }
-            if (tempSourceName != null)
-            {
-                var isFile = File.Exists(tempSourceName);
-                yield return new ParsedArgument(tempSourceName, isFile, tempOptions);
+                var isOption = !File.Exists(arg);
+                yield return (arg, isOption);
             }
         }
     }

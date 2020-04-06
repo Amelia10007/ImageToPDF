@@ -7,7 +7,6 @@ namespace ImageToPDF
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Images to PDF");
             var commands = ArgumentParser.ParseArguments(args).WithIndex().ToArray();
             foreach (var (command, index) in commands)
             {

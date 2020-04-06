@@ -5,6 +5,11 @@ using System.IO;
 
 namespace ImageToPDF
 {
+
+
+    class ArgumentParse
+    {
+    }
     static class ArgumentParser
     {
         public static IEnumerable<TaskCommand> ParseArguments(IEnumerable<string> args)

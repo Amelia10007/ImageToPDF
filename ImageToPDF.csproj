@@ -49,9 +49,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentOptionCollection.cs" />
+    <Compile Include="ArgumentToken.cs" />
     <Compile Include="ArgumentParser.cs" />
+    <Compile Include="DestinationFile.cs" />
     <Compile Include="EpsConverter.cs" />
     <Compile Include="ApplicationSetting.cs" />
+    <Compile Include="IImageConverter.cs" />
+    <Compile Include="ImageFileKind.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="LogLevel.cs" />
+    <Compile Include="Range.cs" />
+    <Compile Include="SourceFile.cs" />
     <Compile Include="TaskCommand.cs" />
     <Compile Include="EmfConverter.cs" />
     <Compile Include="EnumerableExtension.cs" />
@@ -62,6 +71,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegularImageConverter.cs" />
+    <Compile Include="Id.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ImageToPDF
 {
@@ -10,6 +6,6 @@ namespace ImageToPDF
     {
         IEnumerable<ImageFileKind> GetApplicableImageFileKinds();
         IEnumerable<ImageFileKind> GetAvailableDestinationImageFileKinds();
-        DestinationFile ConvertThenSave(SourceFile source, ImageFileKind imageFileKind, ILogger logger);
+        DestinationFile ConvertThenSave(SourceFile source, DestinationFile destination, ILogger logger);
     }
 }

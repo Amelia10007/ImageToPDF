@@ -17,5 +17,14 @@ namespace ImageToPDF
             this.ImageFileKind = ImageFileKind.FromExtension(System.IO.Path.GetExtension(path));
             this.Path = path;
         }
+
+        public DestinationFile GetConvertionDestination(ImageFileKind destinationKind)
+        {
+            var path = System.IO.Path.GetFileNameWithoutExtension(this.Path);
+            var extension = destinationKind.GetExtensionWithDot();
+            var destinationPath = $"{path}{extension}";
+
+            return new DestinationFile(destinationPath);
+        }
     }
 }

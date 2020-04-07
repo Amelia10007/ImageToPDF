@@ -62,7 +62,6 @@
     <Compile Include="Converter\Powerpoint2Eps.cs" />
     <Compile Include="Converter\Powerpoint2Pdf.cs" />
     <Compile Include="DestinationFile.cs" />
-    <Compile Include="EpsConverter.cs" />
     <Compile Include="ApplicationSetting.cs" />
     <Compile Include="ImageFileKind.cs" />
     <Compile Include="ILogger.cs" />
@@ -70,16 +69,8 @@
     <Compile Include="Range.cs" />
     <Compile Include="SourceFile.cs" />
     <Compile Include="StdoutLogger.cs" />
-    <Compile Include="TaskCommand.cs" />
-    <Compile Include="EmfConverter.cs" />
-    <Compile Include="EnumerableExtension.cs" />
-    <Compile Include="PdfImageExtractor.cs" />
-    <Compile Include="IPdfImageGenerator.cs" />
-    <Compile Include="PdfImageGeneratorCollection.cs" />
-    <Compile Include="PowerPointExtracter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegularImageConverter.cs" />
     <Compile Include="Id.cs" />
   </ItemGroup>
   <ItemGroup>

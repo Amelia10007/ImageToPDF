@@ -20,7 +20,7 @@ namespace ImageToPDF
 
         public DestinationFile GetConvertionDestination(ImageFileKind destinationKind)
         {
-            var path = System.IO.Path.GetFileNameWithoutExtension(this.Path);
+            var path = System.IO.Path.GetDirectoryName(this.Path) + "\\" + System.IO.Path.GetFileNameWithoutExtension(this.Path);
             var extension = destinationKind.GetExtensionWithDot();
             var destinationPath = $"{path}{extension}";
 

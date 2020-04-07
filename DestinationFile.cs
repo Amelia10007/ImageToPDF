@@ -10,5 +10,7 @@
             this.ImageFileKind = ImageFileKind.FromExtension(System.IO.Path.GetExtension(path));
             this.Path = path;
         }
+
+        public SourceFile AsSourceFile() => new SourceFile(this.Path);
     }
 }

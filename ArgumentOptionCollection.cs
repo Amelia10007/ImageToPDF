@@ -11,7 +11,6 @@ namespace ImageToPDF
         public ImageFileKind DestinationImageFileKind { get; private set; } = ImageFileKind.Pdf;
         public Range<uint> PowerpointPageRange { get; private set; } = new Range<uint>(0, uint.MaxValue);
         public bool EnableVersionInfoDisplay { get; private set; } = false;
-        public LogLevel LogLevel { get; private set; } = LogLevel.Info;
 
         /// <summary>
         /// 
@@ -33,11 +32,13 @@ namespace ImageToPDF
                     case "--allow-overwrite":
                         argumentOptionCollection.AllowDestinationOverwrite = true;
                         remainingTokens.RemoveAt(0);
+                        logger.WriteLog("Allow-overwrite option detected", LogLevel.Debug);
                         break;
                     case "-r":
                     case "--recursive":
                         argumentOptionCollection.EnableRecursiveDirectorySearch = true;
                         remainingTokens.RemoveAt(0);
+                        logger.WriteLog("Search-directory-recursively option detected", LogLevel.Debug);
                         break;
                     case "-t":
                     case "--output-type":
@@ -56,6 +57,8 @@ namespace ImageToPDF
                             goto err;
                         }
                         remainingTokens.RemoveRange(0, 2);
+                        logger.WriteLog("Output-type option detected", LogLevel.Debug);
+                        logger.WriteLog($"Output type: {argumentOptionCollection.DestinationImageFileKind}", LogLevel.Debug);
                         break;
                     case "-p":
                     case "--powerpoint-page-range":
@@ -77,11 +80,14 @@ namespace ImageToPDF
                             goto err;
                         }
                         remainingTokens.RemoveRange(0, 3);
+                        logger.WriteLog("Powerpoint-page-range option detected", LogLevel.Debug);
+                        logger.WriteLog($"Page range: {argumentOptionCollection.PowerpointPageRange.Start} to {argumentOptionCollection.PowerpointPageRange.End}", LogLevel.Debug);
                         break;
                     case "-v":
                     case "--version":
                         argumentOptionCollection.EnableVersionInfoDisplay = true;
                         remainingTokens.RemoveAt(0);
+                        logger.WriteLog("Version-dislay option detected", LogLevel.Debug);
                         break;
                     case "-L":
                     case "--log-level":
@@ -93,7 +99,7 @@ namespace ImageToPDF
                         try
                         {
                             var logLevel = Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>().Single(level => level.ToString().ToLower() == remainingTokens[1].Token);
-                            argumentOptionCollection.LogLevel = logLevel;
+                            logger.SetLogLevel(logLevel);
                         }
                         catch (InvalidOperationException)
                         {
@@ -101,6 +107,7 @@ namespace ImageToPDF
                             goto err;
                         }
                         remainingTokens.RemoveRange(0, 2);
+                        logger.WriteLog("Log-level option detected", LogLevel.Debug);
                         break;
                     default:
                         logger.WriteLog($"Unexpected option \"{remainingTokens[0].Token}\"", LogLevel.Error);

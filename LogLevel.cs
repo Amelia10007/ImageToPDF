@@ -6,6 +6,5 @@
         Info,
         Warn,
         Error,
-        None,
     }
 }

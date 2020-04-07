@@ -7,9 +7,11 @@ namespace UnitTest
     class LoggerImpl : ILogger
     {
         public string LastLog { get; private set; } = "";
-        public LogLevel? LogLevelOfLastLog { get; private set; } = null;
+        public LogLevel LogLevelOfLastLog { get; private set; }
 
         public LoggerImpl() { }
+
+        public void SetLogLevel(LogLevel level) { }
 
         public void WriteLog(string log, LogLevel level)
         {
@@ -33,11 +35,8 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(0, remainningTokens.Count);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -52,12 +51,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("file1.bmp"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -72,12 +68,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("file1.bmp"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -92,12 +85,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("file1.bmp"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -112,12 +102,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("file1.bmp"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -132,12 +119,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("file1.bmp"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -152,12 +136,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Eps, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("file1.bmp"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -172,12 +153,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Eps, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("file1.bmp"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -218,12 +196,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(3, 5), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("slide.pptx"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -238,12 +213,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(3, 5), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("slide.pptx"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -302,11 +274,8 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsTrue(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(0, remainningTokens.Count);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -321,11 +290,8 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsTrue(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Info, optionCollection.LogLevel);
 
             Assert.AreEqual(0, remainningTokens.Count);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -340,12 +306,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Debug, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("file1.png"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -360,12 +323,20 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Pdf, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(uint.MinValue, uint.MaxValue), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Debug, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("file1.png"), remainningTokens[0]);
+        }
 
-            Assert.IsNull(logger.LogLevelOfLastLog);
+        [TestMethod]
+        public void TestLoadArgumentOptionCollection_LogLevel_InvalidLevel()
+        {
+            var logger = new LoggerImpl();
+            var argumentTokens = new[] { new ArgumentToken("--log-level"), new ArgumentToken("carropino"), new ArgumentToken("file1.png") };
+
+            Assert.ThrowsException<ArgumentException>(delegate { ArgumentOptionCollection.LoadArgumentOptionCollection(argumentTokens, logger); });
+
+            Assert.AreEqual(LogLevel.Error, logger.LogLevelOfLastLog);
         }
 
         [TestMethod]
@@ -390,12 +361,9 @@ namespace UnitTest
             Assert.AreEqual(ImageFileKind.Eps, optionCollection.DestinationImageFileKind);
             Assert.AreEqual(new Range<uint>(5, 10), optionCollection.PowerpointPageRange);
             Assert.IsFalse(optionCollection.EnableVersionInfoDisplay);
-            Assert.AreEqual(LogLevel.Debug, optionCollection.LogLevel);
 
             Assert.AreEqual(1, remainningTokens.Count);
             Assert.AreEqual(new ArgumentToken("slide.pptx"), remainningTokens[0]);
-
-            Assert.IsNull(logger.LogLevelOfLastLog);
         }
 
         [TestMethod]

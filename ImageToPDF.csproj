@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="ArgumentOptionCollection.cs" />
     <Compile Include="ArgumentToken.cs" />
-    <Compile Include="ArgumentParser.cs" />
+    <Compile Include="ArgumentParse.cs" />
     <Compile Include="DestinationFile.cs" />
     <Compile Include="EpsConverter.cs" />
     <Compile Include="ApplicationSetting.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="Range.cs" />
     <Compile Include="SourceFile.cs" />
+    <Compile Include="StdoutLogger.cs" />
     <Compile Include="TaskCommand.cs" />
     <Compile Include="EmfConverter.cs" />
     <Compile Include="EnumerableExtension.cs" />

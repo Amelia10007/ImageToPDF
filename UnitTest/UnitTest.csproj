@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentOptionCollectionTest.cs" />
+    <Compile Include="ArgumentParseTest.cs" />
     <Compile Include="ArgumentTokenTest.cs" />
     <Compile Include="IdTest.cs" />
     <Compile Include="ImageFileKindTest.cs" />

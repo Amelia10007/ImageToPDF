@@ -1,116 +1,103 @@
-ImageToPDF
-====
+# ImageToPDF
+様々な形式の画像ファイルを、PDF (+α)形式に変換する。
 
-Converts various kinds of image file to PDF.
+# 概要
+以下の形式の画像をPDF形式などに変換します。
 
-## Description
+- ラスタイメージ (bmp, png, jpg, gif, tif)
+- ベクタイメージ (wmf, emf, eps)
+- プレゼンテーション (ppt, pptx)
 
-ImageToPDF can convert the following kinds of file to PDF:
+# 動作環境
 
-1. raster image  
-bmp, png, jpg (jpeg), gif and tif (tiff) are available.
+- Windows 10
+- .NET Framework 4.5
+- (ppt, pptxを変換する場合) Microsoft Powerpoint 2013 or later
+- (wmf, eps, ppt, pptxをepsやpdfに変換する場合) [ghostscript] https://www.ghostscript.com/
+- (wmf, ppt, pptxをepsやpdfに変換する場合) [MetafileToEPSConverter] https://wiki.lyx.org/Windows/MetafileToEPSConverter
 
-2. vector image  
-wmf, emf and eps are available.
+# Build from source
 
-3. Microsoft PowerPoint presentation (*.ppt, *.pptx)  
-Converts all objects in each slide to PDF slide by slide without margin.
-
-4. PDF  
-Extracts all images in the PDF, then save those image by image.
-
----
-
-## Requirement
-Windows10  
-Microsoft PowerPoint 2013 or later  
-.NET Framework 4.5  
-[ghostscript] https://www.ghostscript.com/  
-[MetafileToEPSConverter] https://wiki.lyx.org/Windows/MetafileToEPSConverter
-
----
-
-## Install
 1. Clone or download this repository
 2. Build the project using VisualStudio 2015 or later.
 3. Edit a setting file as described below.
-4. Run ImageToPDF.exe in ProjectFolder\bin\Release\
+4. Run ImageToPDF.exe in ProjectFolder\bin\Debug\
 
-## Setting
-Before you run ImageToPDF, you have to prepare a setting file "settings.txt" at the same directory with the executable.  
+# Usage
 
-"settings.txt" has to contain the locations of ghostscript and MetafileToEPSConverter. Its format will be like this:  
+## コマンド
+```> ImageToPDF.exe [OPTIONS] [FILES|DIRECTORIES]```  
 
-EpsConverterPath = C:\Program Files\ghostscript\executable.exe  
-EmfConverterPath = C:\Program Files\emf2eps.exe
+### FILE
+変換元の画像ファイルパスを0個以上指定する。
 
----
+### DIRECTORIY
+変換元の画像ファイルが存在するディレクトリを0個以上指定する。  
+このディレクトリ内のすべての画像を変換する。
 
-## Usage
-In command prompt, type  
+### Option
 
-"ImageToPDF.exe (filenames | DirectoryNames | options)"  
+- ```-w```, ```--allow-overwrite```  
+変換後のファイルと同じ名前のファイルがすでに存在する場合、そのファイルを上書きする。  
+何も指定しない場合は上書きされない。
 
-* filenames  
-ImageToPDF converts these files.
-File format is judged by its extension.
+- ```-r```, ```--recursive```  
+変換対象にディレクトリを指定した場合に有効。  
+そのディレクトリを再帰的に検索し、存在するすべての画像ファイルを変換する。
 
-* DirectoryNames  
-ImageToPDF detects all files in the directories and converts those.
+- ```-t Type```, ```--output-type Type```  
+変換後のファイル形式を```Type```に指定する。
+    - 何も指定しない場合、```Type```はpdfになる。
+    - 各変換元のファイル形式に対して利用可能な```Type```は以下の表のとおり。
+    - 変換が不可能な組み合わせ (bmpをpdfに、など)は無視される。
 
-* options  
-    * DirectoryName -r  
-    ImageToPDF detects all files in the directory recursively.
-    * PowerpointFilename page  
-    ImageToPDF converts the page-th slide in the powerpoint (page must be an integer).
-    * PowerpointFilename start end  
-    ImageToPDF converts the slides from start-th to end-th (these options must be integers).
+<center>
 
-ImageToPDF creates PDF in the same directory with the input file.
+|  変換元のファイル形式  |  Available ```Type```s  |
+| - | - |
+|  bmp  |  pdf  |
+|  png  |  pdf  |
+|  jpg (jpeg)  |  pdf  |
+|  gif  |  pdf  |
+|  tif (tiff)  |  pdf  |
+|  wmf  |  pdf  |
+|  emf  |  pdf, eps  |
+|  eps  |  pdf  |
+|  ppt, pptx  |  pdf, eps, emf  |
 
-Generally PDF name is the same with the source file except its extension.  
+</center>
 
-If the file with the same name already exists, it will be overwritten.
+- ```-p start end```, ```--powerpoint--page-range start end```  
+Microsoft Powerpointのファイル (*.ppt, *.pptx)を変換する場合のみ有効。  
+スライドの```start```ページめから```end```ページめまでの各ページを個別の画像ファイルに変換する。  
+    - 変換結果のファイル名は、${変換元のファイル名}${ページ番号}${拡張子}となる。  
+例えば「ImageToPDF.exe -p 5 7 presentation.pptx」とコマンドを実行した場合、「presentation5.pdf」「presentation6.pdf」「presentation7.pdf」がそれぞれ出力される。
+    - 何も指定しない場合、スライドの全ページが変換対象となる。
 
-## Example
-In command prompt, if you type
+- ```-v```, ```--version```  
+プログラムのバージョン情報を出力して、プログラムを終了する。
 
-* ImageToPDF.exe image1.jpg image2.png
-Converts image1.jpg and image2.png to image1.pdf and image2.pdf, respectively.
+- ```-L LogLevel```, ```--log-level LogLevel```  
+プログラム実行中に表示するログの最低レベルを```LogLevel```に指定する。  
+利用可能な```LogLevel```は```debug```、```info```、```warn```、```error```、```none```の5つ。  
+何も指定しない場合、```LogLevel```は```Info```とななる。  
+もし変換中にエラーなどが発生した場合、このオプションを```Debug```に指定して出力を確認すると解決法が分かるかもしれません。
 
-* ImageToPDF.exe presentation.pptx 5  
-Converts 5th slide in presentation.pptx.
+## 設定
+ImageToPDF.exeと同ディレクトリにsettings.txtを保存することで、設定をカスタマイズできる。
 
-* ImageToPDF.exe presentation.pptx 3 10  
-Converts from 3rd to 10th slides in presentation.pptx. 8 (= 10 - 3 +1) PDF files will be generated.
+- EpsConverterPath  
+ghostscriptの実行ファイルパスを、「EpsConverterPath=$path」の形式で指定する。  
+例:  
+EpsConverterPath=C:\Program Files\gs\gs9.27\bin\gswin64.exe
 
-* ImageToPDF.exe directory  
-If the directory has the following structure,  
-directory  
-|  
-|- image.jpg  
-|- presentation.pptx  
-    * converts image.jpg to image.pdf
-    * converts all slides in presentation.pptx to presentation1.pdf, presentation2.pdf,...
+- EmfConverterPath  
+Metafile to EPS Converterの実行ファイルパスを、「EmfConverterPath=$path」の形式で指定する。  
+例:  
+EmfConverterPath=C:\Program Files (x86)\Metafile to EPS Converter\metafile2eps.exe
 
-* ImageToPDF.exe parent -r  
-If the directory has the following structure,  
-parent  
-|  
-|- child1  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- image1.jpg  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- presentation1.pptx  
-|- child2  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- image2.png  
-|- image.gif
-
-    ImageToPDF converts child1/image1.jpg, child1/presentation1.pptx, child2/image.png and image.gif
-
----
-
-
-## Licence
+# License
 MIT
 
-## Author
-[Amelia10007](https://github.com/Amelia10007)
+# Author
+[Amelia10007] https://github.com/Amelia10007

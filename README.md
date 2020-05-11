@@ -96,6 +96,9 @@ Metafile to EPS Converter‚ÌÀsƒtƒ@ƒCƒ‹ƒpƒX‚ğAuEmfConverterPath=$pathv‚ÌŒ`®‚
 —á:  
 EmfConverterPath=C:\Program Files (x86)\Metafile to EPS Converter\metafile2eps.exe
 
+## Šù’m‚Ì•s‹ï‡
+emf/eps/ppt/pptx‚ğpdf/eps/emf‚É•ÏŠ·‚·‚éê‡A<u>•ÏŠ·‘ÎÛ‚Ìƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX‚ª‹ó”’‚ğŠÜ‚ñ‚Å‚¢‚é</u>‚Æˆ—‚ª“r’†‚Å’â~‚µ‚Ä‚µ‚Ü‚¤B
+
 # License
 MIT
 

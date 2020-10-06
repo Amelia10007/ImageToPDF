@@ -1,59 +1,61 @@
 # ImageToPDF
-�l�X�Ȍ`���̉摜�t�@�C�����APDF (+��)�`���ɕϊ�����B
+様々な形式の画像ファイルを、PDF (+α)形式に変換する。
 
-# �T�v
-�ȉ��̌`���̉摜��PDF�`���Ȃǂɕϊ����܂��B
+# 概要
+以下の形式の画像をPDF形式などに変換します。
 
-- ���X�^�C���[�W (bmp, png, jpg, gif, tif)
-- �x�N�^�C���[�W (wmf, emf, eps)
-- �v���[���e�[�V���� (ppt, pptx)
+- ラスタイメージ (bmp, png, jpg, gif, tif)
+- ベクタイメージ (wmf, emf, eps)
+- プレゼンテーション (ppt, pptx)
 
-# �����
+# 動作環境
 
 - Windows 10
 - .NET Framework 4.5
-- (ppt, pptx��ϊ�����ꍇ) Microsoft Powerpoint 2013 or later
-- (wmf, eps, ppt, pptx��eps��pdf�ɕϊ�����ꍇ) [ghostscript] https://www.ghostscript.com/
-- (wmf, ppt, pptx��eps��pdf�ɕϊ�����ꍇ) [MetafileToEPSConverter] https://wiki.lyx.org/Windows/MetafileToEPSConverter
+- (ppt, pptxを変換する場合) Microsoft Powerpoint 2013 or later
+- (wmf, eps, ppt, pptxをepsやpdfに変換する場合) [ghostscript] https://www.ghostscript.com/
+- (wmf, ppt, pptxをepsやpdfに変換する場合) [MetafileToEPSConverter] https://wiki.lyx.org/Windows/MetafileToEPSConverter
 
-# Build from source
+# ビルド
 
-1. Clone or download this repository
-2. Build the project using VisualStudio 2015 or later.
-3. Edit a setting file as described below.
-4. Run ImageToPDF.exe in ProjectFolder\bin\Debug\
+1. このリポジトリをクローン
+1. .slnをVisual Studio 2015以上で開く
+1. NuGetパッケージマネージャーで「iTextSharp」をソリューションに追加
+1. ビルド
+1. 設定ファイルを以下の説明の通りに編集する
+1. このリポジトリの\bin\DebugにあるImageToPDF.exeを実行
 
 # Usage
 
-## �R�}���h
+## コマンド
 ```> ImageToPDF.exe [OPTIONS] [FILES|DIRECTORIES]```  
 
 ### FILE
-�ϊ����̉摜�t�@�C���p�X��0�ȏ�w�肷��B
+変換元の画像ファイルパスを0個以上指定する。
 
 ### DIRECTORIY
-�ϊ����̉摜�t�@�C�������݂���f�B���N�g����0�ȏ�w�肷��B  
-���̃f�B���N�g�����̂��ׂẲ摜��ϊ�����B
+変換元の画像ファイルが存在するディレクトリを0個以上指定する。  
+このディレクトリ内のすべての画像を変換する。
 
 ### Option
 
 - ```-w```, ```--allow-overwrite```  
-�ϊ���̃t�@�C���Ɠ������O�̃t�@�C�������łɑ��݂���ꍇ�A���̃t�@�C�����㏑������B  
-�����w�肵�Ȃ��ꍇ�͏㏑������Ȃ��B
+変換後のファイルと同じ名前のファイルがすでに存在する場合、そのファイルを上書きする。  
+何も指定しない場合は上書きされない。
 
 - ```-r```, ```--recursive```  
-�ϊ��ΏۂɃf�B���N�g�����w�肵���ꍇ�ɗL���B  
-���̃f�B���N�g�����ċA�I�Ɍ������A���݂��邷�ׂẲ摜�t�@�C����ϊ�����B
+変換対象にディレクトリを指定した場合に有効。  
+そのディレクトリを再帰的に検索し、存在するすべての画像ファイルを変換する。
 
 - ```-t Type```, ```--output-type Type```  
-�ϊ���̃t�@�C���`����```Type```�Ɏw�肷��B
-    - �����w�肵�Ȃ��ꍇ�A```Type```��pdf�ɂȂ�B
-    - �e�ϊ����̃t�@�C���`���ɑ΂��ė��p�\��```Type```�͈ȉ��̕\�̂Ƃ���B
-    - �ϊ����s�\�ȑg�ݍ��킹 (bmp��pdf�ɁA�Ȃ�)�͖��������B
+変換後のファイル形式を```Type```に指定する。
+    - 何も指定しない場合、```Type```はpdfになる。
+    - 各変換元のファイル形式に対して利用可能な```Type```は以下の表のとおり。
+    - 変換が不可能な組み合わせ (bmpをpdfに、など)は無視される。
 
 <center>
 
-|  �ϊ����̃t�@�C���`��  |  Available ```Type```s  |
+|  変換元のファイル形式  |  Available ```Type```s  |
 | - | - |
 |  bmp  |  pdf  |
 |  png  |  pdf  |
@@ -68,36 +70,36 @@
 </center>
 
 - ```-p start end```, ```--powerpoint--page-range start end```  
-Microsoft Powerpoint�̃t�@�C�� (*.ppt, *.pptx)��ϊ�����ꍇ�̂ݗL���B  
-�X���C�h��```start```�y�[�W�߂���```end```�y�[�W�߂܂ł̊e�y�[�W���ʂ̉摜�t�@�C���ɕϊ�����B  
-    - �ϊ����ʂ̃t�@�C�����́A${�ϊ����̃t�@�C����}${�y�[�W�ԍ�}${�g���q}�ƂȂ�B  
-�Ⴆ�΁uImageToPDF.exe -p 5 7 presentation.pptx�v�ƃR�}���h�����s�����ꍇ�A�upresentation5.pdf�v�upresentation6.pdf�v�upresentation7.pdf�v�����ꂼ��o�͂����B
-    - �����w�肵�Ȃ��ꍇ�A�X���C�h�̑S�y�[�W���ϊ��ΏۂƂȂ�B
+Microsoft Powerpointのファイル (*.ppt, *.pptx)を変換する場合のみ有効。  
+スライドの```start```ページめから```end```ページめまでの各ページを個別の画像ファイルに変換する。  
+    - 変換結果のファイル名は、${変換元のファイル名}${ページ番号}${拡張子}となる。  
+例えば「ImageToPDF.exe -p 5 7 presentation.pptx」とコマンドを実行した場合、「presentation5.pdf」「presentation6.pdf」「presentation7.pdf」がそれぞれ出力される。
+    - 何も指定しない場合、スライドの全ページが変換対象となる。
 
 - ```-v```, ```--version```  
-�v���O�����̃o�[�W���������o�͂��āA�v���O�������I������B
+プログラムのバージョン情報を出力して、プログラムを終了する。
 
 - ```-L LogLevel```, ```--log-level LogLevel```  
-�v���O�������s���ɕ\�����郍�O�̍Œ჌�x����```LogLevel```�Ɏw�肷��B  
-���p�\��```LogLevel```��```debug```�A```info```�A```warn```�A```error```�A```none```��5�B  
-�����w�肵�Ȃ��ꍇ�A```LogLevel```��```Info```�ƂȂȂ�B  
-�����ϊ����ɃG���[�Ȃǂ����������ꍇ�A���̃I�v�V������```Debug```�Ɏw�肵�ďo�͂��m�F����Ɖ����@�������邩������܂���B
+プログラム実行中に表示するログの最低レベルを```LogLevel```に指定する。  
+利用可能な```LogLevel```は```debug```、```info```、```warn```、```error```、```none```の5つ。  
+何も指定しない場合、```LogLevel```は```Info```とななる。  
+もし変換中にエラーなどが発生した場合、このオプションを```Debug```に指定して出力を確認すると解決法が分かるかもしれません。
 
-## �ݒ�
-ImageToPDF.exe�Ɠ��f�B���N�g����settings.txt��ۑ����邱�ƂŁA�ݒ���J�X�^�}�C�Y�ł���B
+## 設定
+ImageToPDF.exeと同ディレクトリにsettings.txtを保存することで、設定をカスタマイズできる。
 
 - EpsConverterPath  
-ghostscript�̎��s�t�@�C���p�X���A�uEpsConverterPath=$path�v�̌`���Ŏw�肷��B  
-��:  
+ghostscriptの実行ファイルパスを、「EpsConverterPath=$path」の形式で指定する。  
+例:  
 EpsConverterPath=C:\Program Files\gs\gs9.27\bin\gswin64.exe
 
 - EmfConverterPath  
-Metafile to EPS Converter�̎��s�t�@�C���p�X���A�uEmfConverterPath=$path�v�̌`���Ŏw�肷��B  
-��:  
+Metafile to EPS Converterの実行ファイルパスを、「EmfConverterPath=$path」の形式で指定する。  
+例:  
 EmfConverterPath=C:\Program Files (x86)\Metafile to EPS Converter\metafile2eps.exe
 
-## ���m�̕s�
-emf/eps/ppt/pptx��pdf/eps/emf�ɕϊ�����ꍇ�A<u>�ϊ��Ώۂ̃t�@�C���ւ̃t���p�X���󔒂��܂�ł���</u>�Ə������r���Œ�~���Ă��܂��B
+## 既知の不具合
+emf/eps/ppt/pptxをpdf/eps/emfに変換する場合、<u>変換対象のファイルへのフルパスが空白を含んでいる</u>と処理が途中で停止してしまう。
 
 # License
 MIT

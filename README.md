@@ -99,7 +99,8 @@ Metafile to EPS Converterの実行ファイルパスを、「EmfConverterPath=$p
 EmfConverterPath=C:\Program Files (x86)\Metafile to EPS Converter\metafile2eps.exe
 
 ## 既知の不具合
-emf/eps/ppt/pptxをpdf/eps/emfに変換する場合、<u>変換対象のファイルへのフルパスが空白を含んでいる</u>と処理が途中で停止してしまう。
+- emf/eps/ppt/pptxをpdf/eps/emfに変換する場合、<u>変換対象のファイルへのフルパスが空白を含んでいる</u>と処理が途中で停止してしまう。
+- Powerpointのスライドを画像化する場合、背景色をテクスチャにした図や3Dグラフィックを用いた図をうまく変換できないことがある。
 
 # License
 MIT
